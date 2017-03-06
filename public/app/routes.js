@@ -1,4 +1,4 @@
-angular.module('babbelnRoutes', ['ngRoute'])
+var app = angular.module('babbelnRoutes', ['ngRoute'])
 
 .config(function($routeProvider, $locationProvider){
 
@@ -14,11 +14,85 @@ angular.module('babbelnRoutes', ['ngRoute'])
 
   .when('/register', {
     templateUrl: 'app/views/pages/users/register.html',
-    controller: 'user-registration',
-    controllerAs: 'register'
+    controller: 'ctrl-registration',
+    controllerAs: 'register',
+    authenticated: false
+  })
+
+  .when('/login', {
+    templateUrl: 'app/views/pages/users/login.html',
+    authenticated: false
+  })
+
+  .when('/logout', {
+    templateUrl: 'app/views/pages/users/logout.html',
+    authenticated: true
+  })
+
+  .when('/profile', {
+    templateUrl: 'app/views/pages/users/profile.html',
+    authenticated: true
+  })
+
+  .when('/facebook/:token', {
+    templateUrl: 'app/views/pages/users/social/social.html',
+    controller: 'ctrl-facebook',
+    controllerAs: 'facebook',
+    authenticated: false
+  })
+
+  .when('/facebookerror', {
+    templateUrl: 'app/views/pages/users/login.html',
+    controller: 'ctrl-facebook',
+    controllerAs: 'facebook',
+    authenticated: false
+  })
+
+  .when('/twitter/:token', {
+    templateUrl: 'app/views/pages/users/social/social.html',
+    controller: 'ctrl-twitter',
+    controllerAs: 'twitter',
+    authenticated: false
+  })
+
+  .when('/twittererror', {
+    templateUrl: 'app/views/pages/users/login.html',
+    controller: 'ctrl-twitter',
+    controllerAs: 'twitter',
+    authenticated: false
+  })
+
+  .when('/google/:token', {
+    templateUrl: 'app/views/pages/users/social/social.html',
+    controller: 'ctrl-google',
+    controllerAs: 'google',
+    authenticated: false
+  })
+
+  .when('/googleerror', {
+    templateUrl: 'app/views/pages/users/login.html',
+    controller: 'ctrl-google',
+    controllerAs: 'google',
+    authenticated: false
   })
 
   .otherwise({ redirectTo: '/'});
 
-  $locationProvider.html5Mode(false).hashPrefix('');
+  $locationProvider.html5Mode(true).hashPrefix('');
 });
+
+app.run(['$rootScope', 'Auth', '$location', function($rootScope, Auth, $location){
+  $rootScope.$on('$routeChangeStart', function(event, next, current){
+    if(next.$$route.authenticated){
+      if(!Auth.isLoggedIn()){
+        event.preventDefault();
+        $location.path('/');
+      }
+    } else if(!next.$$route.authenticated){
+      if(Auth.isLoggedIn()){
+        event.preventDefault();
+        $location.path('/profile');
+      }
+    }
+  });
+}]);

@@ -16,18 +16,74 @@
 </div>
 
 <div class="row">
-  <form ng-submit="register.regUser(regData)">
-    <!-- Email -->
-    <label>Email:</label>
-    <input type="text" name="email" class="form-control" ng-model="register.regData.email">
+  <form name="regForm" ng-submit="register.regUser(regData, regForm.$valid)" novalidate>
+    <div ng-class="{ 'has-success': (regForm.name.$valid && !regForm.name.$pristine), 'has-error': (!regForm.name.$valid && !regForm.name.$pristine) || (!regForm.name.$valid && regForm.name.$submitted)}">
+      <!-- Name -->
+      <label>Name:</label>
+      <input type="text" name="name" class="form-control" ng-model="register.regData.name" ng-pattern="/^(([a-zA-Z])+[ ]+([a-zA-Z])+)+$/" ng-minLength="3" ng-maxLength="20" required>
+      <p class="help-block" ng-show="(!regForm.name.$pristine && regForm.name.$error.required)">
+        Du musst einen Namen angeben.
+      </p>
+      <ul ng-show="(!regForm.name.$pristine && regForm.name.$error.pattern) || (!regForm.name.$pristine && regForm.name.$error.minlength) || (!regForm.name.$pristine && regForm.name.$error.maxlength)" class="help-block">
+        <li>Vor- und Nachname mit einem Leerzeichen trennen.</li>
+        <li>Darf keine Sonderzeichen und Zahlen enthalten.</li>
+        <li>Muss zwischen 3 und 20 Zeichen beinhalten.</li>
+      </ul>
+    </div>
     <br>
-    <!-- Username -->
-    <label>Username:</label>
-    <input type="text" name="username" class="form-control" ng-model="register.regData.username">
+    <div ng-class="{ 'has-success': (regForm.email.$valid && !regForm.email.$pristine && !register.emailInvalid), 'has-error': (!regForm.email.$valid && !regForm.email.$pristine) || (!regForm.email.$valid && regForm.email.$submitted) || register.emailInvalid}">
+      <!-- Email -->
+      <label>Email:</label>
+      <input type="text" name="email" class="form-control" ng-model="register.regData.email" ng-minlength="3" ng-maxlength="40" ng-pattern="/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/" ng-blur="register.checkEmail(regData);" required>
+      <span class="glyphicon glyphicon-repeat spinner" ng-show="register.checkingEmail" ></span>
+      <p class="help-block" ng-show="register.emailMsg && regForm.email.$valid">
+        {{register.emailMsg}}
+      </p>
+      <p class="help-block" ng-show="(!regForm.email.$pristine && regForm.email.$error.required)">
+        Du musst eine Email-Adresse angeben.
+      </p>
+      <ul ng-show="(!regForm.email.$pristine && regForm.email.$error.pattern) || (!regForm.email.$pristine && regForm.email.$error.minlength) || (!regForm.email.$pristine && regForm.email.$error.maxlength)" class="help-block">
+        <li>Muss eine gültige Email-Adresse sein.</li>
+      </ul>
+    </div>
     <br>
-    <!-- Password -->
-    <label>Password:</label>
-    <input type="password" name="password" class="form-control" ng-model="register.regData.password">
+    <div ng-class="{ 'has-success': (regForm.username.$valid && !regForm.username.$pristine && !register.usernameInvalid), 'has-error': (!regForm.username.$valid && !regForm.username.$pristine) || (!regForm.username.$valid && regForm.username.$submitted) || register.usernameInvalid}">
+      <!-- Username -->
+      <label>Benutzername:</label>
+      <input type="text" name="username" class="form-control" ng-model="register.regData.username" ng-minlength="3" ng-maxlength="25" ng-pattern="/^(?!.*?[\W])(?=.*?[a-zA-Z]|=.*?[A-Z]).{3,16}$/" ng-blur="register.checkUsername(regData);" required>
+      <p class="help-block" ng-show="register.usernameMsg && regForm.username.$valid">
+        {{register.usernameMsg}}
+      </p>
+      <p class="help-block" ng-show="(!regForm.username.$pristine && regForm.username.$error.required)">
+        Du musst einen Benutzernamen angeben.
+      </p>
+      <ul ng-show="(!regForm.username.$pristine && regForm.username.$error.pattern) || (!regForm.username.$pristine && regForm.username.$error.minlength) || (!regForm.username.$pristine && regForm.username.$error.maxlength)" class="help-block">
+        <li>Benutzername darf keine Sonderzeichen beinhalten.</li>
+      </ul>
+    </div>
+    <br>
+    <div ng-class="{ 'has-success': (regForm.password.$valid && !regForm.password.$pristine), 'has-error': (!regForm.password.$valid && !regForm.password.$pristine) || (!regForm.password.$valid && regForm.password.$submitted)}">
+      <!-- Password -->
+      <label>Passwort:</label>
+      <input type="password" name="password" class="form-control" ng-model="register.regData.password" ng-minlength="6" ng-maxlength="35" ng-pattern="/^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[\W])(?=.*?[\d]).{6,35}$/" required>
+      <p class="help-block" ng-show="(!regForm.password.$pristine && regForm.password.$error.required)">
+        Du musst ein Passwort angeben.
+      </p>
+      <ul ng-show="(!regForm.password.$pristine && regForm.password.$error.pattern) || (!regForm.password.$pristine && regForm.password.$error.minlength) || (!regForm.password.$pristine && regForm.password.$error.maxlength)" class="help-block">
+        <li>Passwort muss aus min. 6 Zeichen bestehen. (max. 35)</li>
+        <li>Muss min. einen Großbuchstaben, ein Sonderzeichen und eine Zahl beinhalten.</li>
+      </ul>
+    </div>
+    <br>
+    <div ng-class="{ 'has-success': confirmed && regForm.confirmPassword.$error.required, 'has-error': !confirmed && !regForm.confirmPassword.$error.required}">
+      <!-- Confirm Password -->
+      <label>Passwort wiederholen:</label>
+      <input type="password" name="confirmPassword" class="form-control" ng-model="register.regData.password" required>
+      <p class="help-block" ng-show="(!regForm.confirmPassword.$pristine && regForm.confirmPassword.$error.required)">
+        Du musst das Passwort zur Sicherheit wiederholen.
+      </p>
+      <p class="help-block" ng-show="!confirmed">Passwörter stimmen nicht überein.</p>
+    </div>
     <br>
     <button type="submit" class="btn btn-primary">Register</button>
   </form>
