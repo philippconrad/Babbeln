@@ -13,7 +13,12 @@ module.exports = function(app, passport){
   app.use(session({secret: 'keyboard cat', resave: false, saveUnitialized: true, cookie: {secure: false}}));
 
   passport.serializeUser(function(user, done){
-    token = jwt.sign({ username: user.username, email: user.email }, secret, { expiresIn : '24h'});
+
+    if(user.active){
+      token = jwt.sign({ username: user.username, email: user.email }, secret, { expiresIn : '24h'});
+    } else {
+      token = 'inactive/error'
+    }
     done(null, user.id);
   });
 
@@ -30,7 +35,7 @@ module.exports = function(app, passport){
     profileFields: ['id', 'displayName', 'photos', 'email']
     },
     function(accessToken, refreshToken, profile, done) {
-      User.findOne({email: profile._json.email}).select('username password email').exec(function(err, user){
+      User.findOne({email: profile._json.email}).select('username password email active').exec(function(err, user){
         if (err) done(err);
 
         if (user && user != null){
@@ -50,7 +55,7 @@ module.exports = function(app, passport){
       userProfileURL: "https://api.twitter.com/1.1/account/verify_credentials.json?include_email=true"
     },
     function(token, tokenSecret, profile, done) {
-      User.findOne({email: profile.emails[0].value}).select('username password email').exec(function(err, user){
+      User.findOne({email: profile.emails[0].value}).select('username password email active').exec(function(err, user){
         if (err) done(err);
 
         if (user && user != null){
@@ -68,7 +73,7 @@ module.exports = function(app, passport){
       callbackURL: "http://localhost:8000/auth/google/callback"
     },
     function(accessToken, refreshToken, profile, done) {
-      User.findOne({email: profile.emails[0].value}).select('username password email').exec(function(err, user){
+      User.findOne({email: profile.emails[0].value}).select('username password email active').exec(function(err, user){
         if (err) done(err);
 
         if (user && user != null){

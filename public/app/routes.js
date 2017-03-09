@@ -29,6 +29,18 @@ var app = angular.module('babbelnRoutes', ['ngRoute'])
     authenticated: true
   })
 
+  .when('/activate/:token', {
+    templateUrl: 'app/views/pages/users/activation/activate.html',
+    controller: 'ctrl-email',
+    controllerAs: 'email'
+  })
+
+  .when('/resend', {
+    templateUrl: 'app/views/pages/users/activation/resend.html',
+    controller: 'ctrl-resend',
+    controllerAs: 'resend'
+  })
+
   .when('/profile', {
     templateUrl: 'app/views/pages/users/profile.html',
     authenticated: true
@@ -70,6 +82,27 @@ var app = angular.module('babbelnRoutes', ['ngRoute'])
   })
 
   .when('/googleerror', {
+    templateUrl: 'app/views/pages/users/login.html',
+    controller: 'ctrl-google',
+    controllerAs: 'google',
+    authenticated: false
+  })
+
+  .when('/facebook/inactive/error', {
+    templateUrl: 'app/views/pages/users/login.html',
+    controller: 'ctrl-facebook',
+    controllerAs: 'facebook',
+    authenticated: false
+  })
+
+  .when('/twitter/inactive/error', {
+    templateUrl: 'app/views/pages/users/login.html',
+    controller: 'ctrl-twitter',
+    controllerAs: 'twitter',
+    authenticated: false
+  })
+
+  .when('/google/inactive/error', {
     templateUrl: 'app/views/pages/users/login.html',
     controller: 'ctrl-google',
     controllerAs: 'google',

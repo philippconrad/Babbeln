@@ -6,6 +6,7 @@ angular.module('babbelnWeb',
     'ngAnimate',
     'mainController',
     'authServices',
+    'emailController',
   ])
 
 .config(function($httpProvider){

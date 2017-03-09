@@ -4,27 +4,34 @@ angular.module('mainController', ['authServices'])
   var app = this;
 
   $rootScope.$on('$routeChangeStart', function(){
+    app.loggedIn = false;
     if(Auth.isLoggedIn()){
-      //console.log('Success: User is logged in');
+      console.log('Success: User is logged in');
       Auth.getUser().then(function(data){
         app.user = data.data;
+        app.loggedIn = true;
       });
     } else {
-      //console.log('Failure: User has to log in');
-      app.username = '';
+      console.log('Failure: User has to log in');
+      app.username = null;
+      app.loggedIn = false;
     }
     if($location.hash() == '_=_') $location.hash(null);
+    console.log(Auth.isLoggedIn());
   });
 
   this.facebook = function(){
+    app.disabled = true;
     $window.location = $window.location.protocol + '//' + $window.location.host + '/auth/facebook';
   }
 
   this.twitter = function(){
+    app.disabled = true;
     $window.location = $window.location.protocol + '//' + $window.location.host + '/auth/twitter';
   }
 
   this.google = function(){
+    app.disabled = true;
     $window.location = $window.location.protocol + '//' + $window.location.host + '/auth/google';
   }
 
@@ -32,6 +39,8 @@ angular.module('mainController', ['authServices'])
     app.loading = true;
     app.errorMsg = false;
     app.successMsg = false;
+    app.expired = false;
+    app.disabled = true;
 
     Auth.login(app.loginData).then(function(data){
       app.loading = false;
@@ -40,11 +49,19 @@ angular.module('mainController', ['authServices'])
 
         $timeout(function(){
           $location.path('/');
-
+          app.loginData = '';
           app.successMsg = false;
         }, 2000);
       } else {
-        app.errorMsg = data.data.message;
+        if(data.data.expired){
+          app.expired = true;
+          app.disabled = true;
+          app.errorMsg = data.data.message;
+        } else {
+          app.errorMsg = data.data.message;
+          app.disabled = true;
+        }
+
       }
     });
   };
@@ -54,6 +71,7 @@ angular.module('mainController', ['authServices'])
     $location.path('/logout');
     $timeout(function () {
       $location.path('/');
-    }, 2000);
+    }, 1000);
   }
+
 });

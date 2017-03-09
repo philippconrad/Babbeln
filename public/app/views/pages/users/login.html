@@ -1,25 +1,25 @@
 <div class="page-header">
-  <h1>User Login</h1>
+  <h1>Login</h1>
 </div>
 
 <div class="row show-hide-message" ng-show="facebook.errorMsg">
-  <div class="alert alert-danger">{{ facebook.errorMsg }}</div>
+  <div class="alert alert-danger">{{ facebook.errorMsg }}&nbsp<a ng-show="facebook.expired" href="/resend" class="text-danger"><strong>Aktivierungslink erneut anfordern</strong></a></div>
 </div>
 
 <div class="row show-hide-message" ng-show="twitter.errorMsg">
-  <div class="alert alert-danger">{{ twitter.errorMsg }}</div>
+  <div class="alert alert-danger">{{ twitter.errorMsg }}&nbsp<a ng-show="twitter.expired" href="/resend" class="text-danger"><strong>Aktivierungslink erneut anfordern</strong></a></div>
 </div>
 
 <div class="row show-hide-message" ng-show="google.errorMsg">
-  <div class="alert alert-danger">{{ google.errorMsg }}</div>
+  <div class="alert alert-danger">{{ google.errorMsg }}&nbsp<a ng-show="google.expired" href="/resend" class="text-danger"><strong>Aktivierungslink erneut anfordern</strong></a></div>
 </div>
 
 <div class="row show-hide-message" ng-show="main.errorMsg">
-  <div class="alert alert-danger">{{ main.errorMsg }}</div>
+  <div class="alert alert-danger">{{ main.errorMsg }}&nbsp<a ng-show="main.expired" href="/resend" class="text-danger"><strong>Aktivierungslink erneut anfordern</strong></a></div>
 </div>
 
 <div class="row show-hide-message" ng-show="main.successMsg">
-  <div class="alert alert-success"><b>Success:</b>{{ main.successMsg }}</div>
+  <div class="alert alert-success">{{ main.successMsg }}</div>
 </div>
 
 <div class="jumbotron text-center" ng-show="main.loading">
@@ -31,15 +31,15 @@
   <form ng-submit="main.doLogin(loginData)">
     <!-- Username -->
     <label>Username:</label>
-    <input type="text" name="username" class="form-control" ng-model="main.loginData.username">
+    <input ng-disabled="main.disabled || facebook.disabled || twitter.disabled || google.disabled" type="text" name="username" class="form-control" ng-model="main.loginData.username">
     <br>
     <!-- Password -->
     <label>Password:</label>
-    <input type="password" name="password" class="form-control" ng-model="main.loginData.password">
+    <input ng-disabled="main.disabled || facebook.disabled || twitter.disabled || google.disabled" type="password" name="password" class="form-control" ng-model="main.loginData.password">
     <br>
-    <button type="submit" class="btn btn-primary">Login</button>&nbsp
-    <button type="button" class="btn btn-success" ng-click="main.facebook();">Facebook</button>
-    <button type="button" class="btn btn-warning" ng-click="main.twitter();">Twitter</button>
-    <button type="button" class="btn btn-danger" ng-click="main.google();">Google</button>
+    <button ng-disabled="main.disabled || facebook.disabled || twitter.disabled || google.disabled" type="submit" class="btn btn-primary">Login</button>&nbsp
+    <button ng-disabled="main.disabled || facebook.disabled || twitter.disabled || google.disabled" type="button" class="btn btn-success" ng-click="main.facebook();">Facebook</button>
+    <button ng-disabled="main.disabled || facebook.disabled || twitter.disabled || google.disabled" type="button" class="btn btn-warning" ng-click="main.twitter();">Twitter</button>
+    <button ng-disabled="main.disabled || facebook.disabled || twitter.disabled || google.disabled" type="button" class="btn btn-danger" ng-click="main.google();">Google</button>
   </form>
 </div>

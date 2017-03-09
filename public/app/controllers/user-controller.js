@@ -7,6 +7,7 @@ angular.module('userController', ['userServices'])
   this.regUser = function(regData, valid){
     app.errorMsg = false;
     app.loading = true;
+    app.disabled = true;
 
     if(valid){
       User.create(app.regData).then(function(data){
@@ -19,11 +20,14 @@ angular.module('userController', ['userServices'])
           }, 2000);
 
         } else {
+          app.loading = false;
+          app.disabled = false;
           app.errorMsg = data.data.message;
         }
       })
     } else {
       app.loading = false;
+      app.disabled = false;
       app.errorMsg = 'Bitte alle Felder ordnungsgemäß ausfüllen.';
     }
   };
@@ -66,12 +70,48 @@ angular.module('userController', ['userServices'])
 
 })
 
+.directive('match', function(){
+  return {
+    restrict: 'A',
+    controller: function($scope){
+      $scope.confirmed = false;
+
+      $scope.doConfirm = function(values){
+        values.forEach(function(ele){
+          if($scope.confirm == ele){
+            $scope.confirmed = true;
+          } else {
+            $scope.confirmed = false;
+          }
+        });
+      }
+    },
+    link: function(scope, element, attrs){
+      attrs.$observe('match', function(){
+        scope.matches = JSON.parse(attrs.match);
+        scope.doConfirm(scope.matches);
+      });
+
+      scope.$watch('confirm', function(){
+        scope.matches = JSON.parse(attrs.match);
+        scope.doConfirm(scope.matches);
+      })
+    }
+  }
+})
+
 .controller('ctrl-facebook', function($routeParams, Auth, $location, $window){
 
   var app = this;
+  app.errorMsg = false;
+  app.expired = false;
+  app.disabled = true;
 
   if($window.location.pathname == '/facebookerror'){
-    app.errorMsg = 'No Account connected with facebook found';
+    app.errorMsg = 'Kein verknüpfter Account mit Facebook gefunden';
+  } else if($window.location.pathname == '/facebook/inactive/error'){
+    app.errorMsg = 'Account ist noch nicht aktiviert.';
+    app.expired = true;
   } else {
     Auth.facebook($routeParams.token);
     $location.path('/');
@@ -81,9 +121,15 @@ angular.module('userController', ['userServices'])
 .controller('ctrl-twitter', function($routeParams, Auth, $location, $window){
 
   var app = this;
+  app.errorMsg = false;
+  app.expired = false;
+  app.disabled = true;
 
   if($window.location.pathname == '/twittererror'){
-    app.errorMsg = 'No Account connected with twitter found';
+    app.errorMsg = 'Kein verknüpfter Account mit Twitter gefunden.';
+  } else if($window.location.pathname == '/twitter/inactive/error'){
+    app.errorMsg = 'Account ist noch nicht aktiviert.';
+    app.expired = true;
   } else {
     Auth.twitter($routeParams.token);
     $location.path('/');
@@ -93,9 +139,15 @@ angular.module('userController', ['userServices'])
 .controller('ctrl-google', function($routeParams, Auth, $location, $window){
 
   var app = this;
+  app.errorMsg = false;
+  app.expired = false;
+  app.disabled = true;
 
   if($window.location.pathname == '/googleerror'){
-    app.errorMsg = 'No Account connected with google found';
+    app.errorMsg = 'Kein verknüpfter Account mit Google gefunden.';
+  } else if($window.location.pathname == '/google/inactive/error'){
+    app.errorMsg = 'Account ist noch nicht aktiviert.';
+    app.expired = true;
   } else {
     Auth.google($routeParams.token);
     $location.path('/');

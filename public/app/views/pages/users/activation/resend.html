@@ -1,0 +1,30 @@
+<div class="page-header">
+  <h1>Aktivierungslink erneut anfordern</h1>
+</div>
+
+<div class="row show-hide-message" ng-show="resend.errorMsg">
+  <div class="alert alert-danger">{{ resend.errorMsg }}</div>
+</div>
+
+<div class="row show-hide-message" ng-show="resend.successMsg">
+  <div class="alert alert-success">{{ resend.successMsg }}</div>
+</div>
+
+<div class="jumbotron text-center" ng-show="resend.loading">
+  <span class="glyphicon glyphicon-repeat spinner"></span>
+  <p>Loading......</p>
+</div>
+
+<div class="row">
+  <form ng-submit="resend.checkCredentials(loginData)">
+    <!-- Username -->
+    <label>Username:</label>
+    <input ng-disabled="resend.disabled" type="text" name="username" class="form-control" ng-model="resend.loginData.username">
+    <br>
+    <!-- Password -->
+    <label>Password:</label>
+    <input ng-disabled="resend.disabled" type="password" name="password" class="form-control" ng-model="resend.loginData.password">
+    <br>
+    <button ng-disabled="resend.disabled" type="submit" class="btn btn-primary">Anfordern</button>&nbsp
+  </form>
+</div>
