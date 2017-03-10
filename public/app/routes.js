@@ -43,6 +43,8 @@ var app = angular.module('babbelnRoutes', ['ngRoute'])
 
   .when('/profile', {
     templateUrl: 'app/views/pages/users/profile.html',
+    controller: 'ctrl-profile',
+    controllerAs: 'profile',
     authenticated: true
   })
 

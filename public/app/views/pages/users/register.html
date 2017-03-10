@@ -34,7 +34,7 @@
     <div ng-class="{ 'has-success': (regForm.email.$valid && !regForm.email.$pristine && !register.emailInvalid), 'has-error': (!regForm.email.$valid && !regForm.email.$pristine) || (!regForm.email.$valid && regForm.email.$submitted) || register.emailInvalid}">
       <!-- Email -->
       <label>Email:</label>
-      <input ng-disbled="register.disabled" type="text" name="email" class="form-control" ng-model="register.regData.email" ng-minlength="3" ng-maxlength="40" ng-pattern="/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/" ng-blur="register.checkEmail(regData);" required>
+      <input ng-disbled="register.disabled" type="text" name="email" class="form-control" ng-model="register.regData.email" ng-minlength="3" ng-maxlength="40" ng-pattern="/^[a-zA-Z0-9_\.-]+@[a-zA-Z_.]+?\.[a-zA-Z]{2,3}$/" ng-blur="register.checkEmail(regData);" required>
       <span class="glyphicon glyphicon-repeat spinner" ng-show="register.checkingEmail" ></span>
       <p class="help-block" ng-show="register.emailMsg && regForm.email.$valid">
         {{register.emailMsg}}
@@ -75,7 +75,7 @@
       </ul>
     </div>
     <br>
-    <div ng-class="{ 'has-success': confirmed && !regForm.confirmPassword.$error.required && !regForm.confirmPassword.$pristine, 'has-error': !confirmed || regForm.confirmPassword.$error.required}">
+    <div ng-class="{ 'has-success': confirmed && !regForm.confirmPassword.$error.required && !regForm.confirmPassword.$pristine, 'has-error': !confirmed || regForm.confirmPassword.$error.required && !regForm.confirmPassword.$pristine }">
       <!-- Confirm Password -->
       <label>Passwort wiederholen:</label>
       <input ng-disbled="register.disabled" type="password" name="confirmPassword" class="form-control" ng-model="confirm" match="{{[firstPassword]}}" ng-change="register.regData.password = confirm" required>

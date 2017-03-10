@@ -17,7 +17,6 @@ angular.module('mainController', ['authServices'])
       app.loggedIn = false;
     }
     if($location.hash() == '_=_') $location.hash(null);
-    console.log(Auth.isLoggedIn());
   });
 
   this.facebook = function(){
@@ -59,7 +58,7 @@ angular.module('mainController', ['authServices'])
           app.errorMsg = data.data.message;
         } else {
           app.errorMsg = data.data.message;
-          app.disabled = true;
+          app.disabled = false;
         }
 
       }

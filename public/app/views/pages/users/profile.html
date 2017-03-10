@@ -10,3 +10,10 @@
     <td>{{main.user.email}}</td>
   </tr>
 </table>
+
+<form>
+  <input type="file" ngf-select ng-model="profile.picFile" name="file"
+             accept="image/*" ngf-max-size="2MB" required
+             ngf-model-invalid="errorFile">
+  <button type="submit" ng-click="profile.updatePhoto(picFile)" name="button"></button>
+</form>

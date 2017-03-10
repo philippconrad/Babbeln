@@ -55,10 +55,15 @@ var passwordValidator = [
 ];
 
 var UserSchema = new Schema({
+  // Profile
   name: {type: String, required: true, validate: nameValidator},
+  image: {type: String, required: false},
+  birthday: {type: Date, required: false},
+  // Authentication
   username: {type: String, lowercase: true, required: true, unique:true, validate: usernameValidator},
   password: {type: String, required: true, validate: passwordValidator, select: false},
   email: {type: String, required: true, lowercase:true, unique: true, validate: emailValidator},
+  // Account
   active: {type: Boolean, required: true, default: false},
   temporarytoken: {type: String, required: true}
 });

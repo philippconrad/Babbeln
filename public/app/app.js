@@ -7,6 +7,7 @@ angular.module('babbelnWeb',
     'mainController',
     'authServices',
     'emailController',
+    'profileController',
   ])
 
 .config(function($httpProvider){

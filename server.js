@@ -11,7 +11,7 @@ var router      = express.Router();
 var appRoutes   = require('./app/routes/api')(router);
 var social      = require('./app/passport/passport')(app, passport);
 
-app.use(morgan('dev'));
+//app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname + '/public'))
