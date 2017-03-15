@@ -105,7 +105,7 @@ angular.module('userController', ['userServices'])
   var app = this;
   app.errorMsg = false;
   app.expired = false;
-  app.disabled = true;
+  app.disabled = false;
 
   if($window.location.pathname == '/facebookerror'){
     app.errorMsg = 'Kein verknüpfter Account mit Facebook gefunden';
@@ -123,7 +123,7 @@ angular.module('userController', ['userServices'])
   var app = this;
   app.errorMsg = false;
   app.expired = false;
-  app.disabled = true;
+  app.disabled = false;
 
   if($window.location.pathname == '/twittererror'){
     app.errorMsg = 'Kein verknüpfter Account mit Twitter gefunden.';
@@ -141,7 +141,7 @@ angular.module('userController', ['userServices'])
   var app = this;
   app.errorMsg = false;
   app.expired = false;
-  app.disabled = true;
+  app.disabled = false;
 
   if($window.location.pathname == '/googleerror'){
     app.errorMsg = 'Kein verknüpfter Account mit Google gefunden.';

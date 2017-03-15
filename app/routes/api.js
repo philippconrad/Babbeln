@@ -23,7 +23,8 @@ module.exports = function(router){
         user.username         = req.body.username;
         user.password         = req.body.password;
         user.email            = req.body.email;
-        user.name             = req.body.name;
+        user.profile.name     = req.body.name;
+        user.profile.city     = "Wetzlar"
         user.temporarytoken   = jwt.sign({ username: user.username, email: user.email }, secret, { expiresIn : '24h'});
 
         if( req.body.username == null || req.body.username == '' ||
@@ -120,7 +121,7 @@ module.exports = function(router){
         } else if(!user.active){
           res.json({sucess: false, message: 'Account ist noch nicht aktiviert.', expired: true});
         } else {
-          var token = jwt.sign({ username: user.username, email: user.email }, secret, { expiresIn : '24h'});
+          var token = jwt.sign({ username: user.username, email: user.email}, secret, { expiresIn : '24h'});
           res.json({success: true, message: 'Login erfolgreich', token: token})
         }
       }
@@ -245,7 +246,13 @@ module.exports = function(router){
   });
 
   router.post('/me', function(req, res){
-    res.send(req.decoded);
+    if(req.decoded.username){
+      User.findOne({username: req.decoded.username}).select('username email profile').exec(function(err, user){
+        if(err) throw err;
+        res.send(user);
+      })
+    }
+
   });
 
   return router;

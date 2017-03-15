@@ -1,19 +1,14 @@
-<div class="page-header">{{main.user.username}}'s Profile</div>
+<div class="row" style="margin-top:40px">
+  <div class="col-sm-3" style="background: red">
 
-<table>
-  <tr>
-    <td>Username</td>
-    <td>{{main.user.username}}</td>
-  </tr>
-  <tr>
-    <td>Email</td>
-    <td>{{main.user.email}}</td>
-  </tr>
-</table>
-
-<form>
-  <input type="file" ngf-select ng-model="profile.picFile" name="file"
-             accept="image/*" ngf-max-size="2MB" required
-             ngf-model-invalid="errorFile">
-  <button type="submit" ng-click="profile.updatePhoto(picFile)" name="button"></button>
-</form>
+  </div>
+  <div class="col-sm-8">
+    <div class="post_babbel">
+      <input type="text" name="" value="">
+      <button type="button" name="button"></button>
+    </div>
+  </div>
+  <div class="col-sm-1">
+    
+  </div>
+</div>
