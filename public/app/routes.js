@@ -32,17 +32,19 @@ var app = angular.module('babbelnRoutes', ['ngRoute'])
   .when('/activate/:token', {
     templateUrl: 'app/views/pages/users/activation/activate.html',
     controller: 'ctrl-email',
-    controllerAs: 'email'
+    controllerAs: 'email',
+    authenticated: false
   })
 
   .when('/resend', {
     templateUrl: 'app/views/pages/users/activation/resend.html',
     controller: 'ctrl-resend',
-    controllerAs: 'resend'
+    controllerAs: 'resend',
+    authenticated: false
   })
 
-  .when('/profile', {
-    templateUrl: 'app/views/pages/users/profile.html',
+  .when('/me', {
+    templateUrl: 'app/views/pages/users/me.html',
     controller: 'ctrl-profile',
     controllerAs: 'profile',
     authenticated: true
@@ -111,6 +113,27 @@ var app = angular.module('babbelnRoutes', ['ngRoute'])
     authenticated: false
   })
 
+  .when('/resetusername', {
+    templateUrl: 'app/views/pages/users/reset/username.html',
+    controller: 'ctrl-username',
+    controllerAs: 'username',
+    authenticated: false
+  })
+
+  .when('/resetpassword', {
+    templateUrl: 'app/views/pages/users/reset/username.html',
+    controller: 'ctrl-password',
+    controllerAs: 'password',
+    authenticated: false
+  })
+
+  .when('/reset/:token', {
+    templateUrl: 'app/views/pages/users/reset/newpassword.html',
+    controller: 'ctrl-reset',
+    controllerAs: 'reset',
+    authenticated: false
+  })
+
   .otherwise({ redirectTo: '/'});
 
   $locationProvider.html5Mode(true).hashPrefix('');
@@ -126,7 +149,7 @@ app.run(['$rootScope', 'Auth', '$location', function($rootScope, Auth, $location
     } else if(!next.$$route.authenticated){
       if(Auth.isLoggedIn()){
         event.preventDefault();
-        $location.path('/profile');
+        $location.path('/me');
       }
     }
   });

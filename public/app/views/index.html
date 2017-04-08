@@ -60,7 +60,7 @@
           <ul class="nav navbar-nav navbar-right">
             <li ng-show="!main.loggedIn;"><a href="/login" >Login</a></li>
             <li ng-show="!main.loggedIn;"><a href="/register">Register</a></li>
-            <li class="nav-profile"><a href="#">{{main.user.profile.name}}</a></li>
+            <li class="nav-profile" ng-show="main.loggedIn"><a href="#">{{main.user.profile.name}}</a></li>
             <li class="dropdown" ng-show="main.loggedIn">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="https://scontent.ftxl1-1.fna.fbcdn.net/v/t1.0-9/14681756_1122292061192696_7721039396491126720_n.jpg?oh=b33f5154e2523dc3859ab4e3016061f8&oe=592A3FC0" alt="" height="40"><span class="caret"></span></a>
               <ul class="dropdown-menu">

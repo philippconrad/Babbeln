@@ -10,5 +10,5 @@ angular.module('profileController', ['ngFileUpload'])
       data: {username: $scope.username, file: file},
     });
     }
-    console.log(app);
+    
   })

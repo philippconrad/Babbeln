@@ -17,11 +17,14 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname + '/public'))
 app.use('/api', appRoutes);
 
+console.log('Connecting to database');
+
 mongoose.connect('mongodb://localhost/babbeln_dev', function(err){
   if(err){
     console.log('Connection to database failed: ' + err);
+
   } else {
-    console.log('Succesfully connected to database.');
+    console.log('Connection established.');
   }
 });
 

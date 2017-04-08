@@ -62,6 +62,8 @@ var UserSchema = new Schema({
   // Account
   active: {type: Boolean, required: true, default: false},
   temporarytoken: {type: String, required: true},
+  resettoken: {type: String, required: false},
+  // Profile
   profile: {
     name: {type: String, required: true, validate: nameValidator},
     avatar: {type: String, required: false},

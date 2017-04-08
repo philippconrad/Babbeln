@@ -229,6 +229,77 @@ module.exports = function(router){
     console.log(req);
   })
 
+  router.put('/resetusername', function(req, res){
+    User.findOne({email: req.params.email}).select('email profile username').exec(function(err, user){
+      if(err){
+        res.json({success: false, message: err});
+      } else {
+        if(!req.params.email){
+          res.json({success: false, message: 'Bitte gebe eine Email an.'})
+        } else {
+          if(!user){
+            res.json({success: false, message: 'Kein Account mit dieser Email gefunden.'})
+          } else {
+            var email = {
+              from: 'Babbeln Support, support@babbeln.me',
+              to: user.email,
+              subject: 'Babbeln - Dein Benutzername',
+              text: 'Hallo ' + user.profile.name + ', du hast deinen Benutzernamen vergessen? <br>Wir helfen dir auf die Sprünge. Bitte bewahre ihn sicher auf. Benutzername: ' + user.username,
+              html: 'Hallo <strong>' + user.profile.name + '</strong>, <br><br> du hast deinen Benutzernamen vergessen? Wir helfen dir auf die Sprünge. Bitte bewahre ihn sicher auf.<br>Benutzername: ' + user.username
+            }
+
+            mailer.sendMail(email, function(err, info){
+              if(err){
+                console.log(err);
+              } else {
+                console.log(user._id + ':' + user.username + ' - requested username. Info: ' + info.response);
+              }
+            });
+            res.json({success: true, message: 'Es wurde eine Email mit deinem Benutzername an deine Email gesendet.'})
+          }
+        }
+      }
+    })
+  });
+
+  router.put('/resetpassword', function(req, res){
+    user.findOne({username: req.body.username}).select().exec(function(err, user){
+      if(err) throw err;
+      if(!user){
+        res.json({success: false, message: 'Benutzername wurde nicht gefunden.'});
+      } else if(!user.active){
+        res.json({success: false, message: 'Account ist noh nicht aktiviert.'})
+      } else {
+        user.resettoken = jwt.sign({ username: user.username, email: user.email }, secret, { expiresIn : '24h'});
+        user.save(function(err){
+          if(err){
+            res.json({success: false, message: err});
+          } else {
+
+            var email = {
+              from: 'Babbeln Support, support@babbeln.me',
+              to: user.email,
+              subject: 'Babbeln Passwort zurücksetzen',
+              text: 'Hallo ' + user.name + ', du hast kürzlich einen neuen Link zum zurücksetzen deines Passwortes für deinen Account angefordert. Bitte klicke auf den Link um dein Passwort zu ändern: http://localhost:8000/reset/' + user.resettoken,
+              html: 'Hallo <strong>' + user.name + '</strong>, <br><br> du hast kürzlich einen neuen Link zum zurücksetzen deines Passwortes für deinen Account angefordert. Bitte klicke auf den Link um dein Passwort zu ändern: <br><br><a href="http://localhost:8000/reset/' + user.resettoken + '">Hier klicken</a>'
+            }
+
+            mailer.sendMail(email, function(err, info){
+              if(err){
+                console.log(err);
+              } else {
+                console.log(user._id + ':' + user.username + ' - requested username. Info: ' + info.response);
+              }
+            });
+
+            res.json({success: true, message:'Passwort zurücksetzen - Link erstellt. Es wurde eine Email mit einem Passwort zurücksetzen-Link an '+  user.email +' gesendet. '});
+          }
+
+        })
+      }
+    })
+  });
+
   router.use(function(req, res, next){
     var token = req.body.token || req.body.query || req.headers['x-access-token'];
 

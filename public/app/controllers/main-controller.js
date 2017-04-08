@@ -6,13 +6,11 @@ angular.module('mainController', ['authServices'])
   $rootScope.$on('$routeChangeStart', function(){
     app.loggedIn = false;
     if(Auth.isLoggedIn()){
-      console.log('Success: User is logged in');
       Auth.getUser().then(function(data){
         app.user = data.data;
         app.loggedIn = true;
       });
     } else {
-      console.log('Failure: User has to log in');
       app.username = null;
       app.loggedIn = false;
     }

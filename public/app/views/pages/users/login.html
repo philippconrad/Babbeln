@@ -38,6 +38,10 @@
       <label>Password:</label>
       <input ng-disabled="main.disabled || facebook.disabled || twitter.disabled || google.disabled" type="password" name="password" class="form-control" ng-model="main.loginData.password">
       <br>
+      <a href="/resetusername" ng-disabled="main.disabled || facebook.disabled || twitter.disabled || google.disabled">Benutzername vergessen?</a>&nbsp&nbsp
+      <a href="/resetpassword" ng-disabled="main.disabled || facebook.disabled || twitter.disabled || google.disabled">Passwort vergessen?</a>
+      <br>
+      <br>
       <button ng-disabled="main.disabled || facebook.disabled || twitter.disabled || google.disabled" type="submit" class="btn btn-babbeln">Login</button>
       <button ng-disabled="main.disabled || facebook.disabled || twitter.disabled || google.disabled" type="button" class="btn btn-social" ng-click="main.facebook();">Facebook</button>
       <button ng-disabled="main.disabled || facebook.disabled || twitter.disabled || google.disabled" type="button" class="btn btn-social" ng-click="main.twitter();">Twitter</button>
